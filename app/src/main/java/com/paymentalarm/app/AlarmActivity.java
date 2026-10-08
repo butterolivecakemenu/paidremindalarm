@@ -1,0 +1,6 @@
+package com.paymentalarm.app;
+import android.app.*;import android.os.*;import android.content.*;import android.graphics.Color;import android.view.*;import android.widget.*;
+public class AlarmActivity extends Activity {
+ @Override public void onCreate(Bundle b){super.onCreate(b);setShowWhenLocked(true);setTurnScreenOn(true);getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON|WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);int id=getIntent().getIntExtra("id",-1);org.json.JSONObject x=AlarmStore.find(this,id);LinearLayout l=new LinearLayout(this);l.setOrientation(1);l.setGravity(Gravity.CENTER);l.setPadding(30,30,30,30);l.setBackgroundColor(Color.rgb(22,28,39));setContentView(l);add(l,"PAYMENT DUE TODAY",24);add(l,x==null?"PAYMENT ALARM":x.optString("name"),29);add(l,"RM "+(x==null?"":x.optString("amount")),42);add(l,x==null?"":x.optString("note"),19);Button stop=new Button(this);stop.setText("STOP ALARM");stop.setTextSize(23);l.addView(stop,new LinearLayout.LayoutParams(-1,140));stop.setOnClickListener(v->{stopService(new Intent(this,RingService.class));finish();});}
+ void add(LinearLayout l,String s,int size){TextView t=new TextView(this);t.setText(s);t.setTextColor(Color.WHITE);t.setTextSize(size);t.setGravity(Gravity.CENTER);t.setPadding(5,15,5,15);l.addView(t);}
+}
